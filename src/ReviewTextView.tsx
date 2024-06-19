@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import protegerIcon from './assets/proteger.png';
-import './ReviewTextView.css'; // Asegúrate de agregar este archivo CSS
+import './ReviewTextView.css'; 
 import axios from 'axios';
 
 interface ReviewTextViewProps {
@@ -53,9 +53,9 @@ const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome, initial
         onChange={handleTextChange}
         rows={5} // Reducido de 10 a 5
       />
-      <button onClick={handleGptRequest} disabled={loading}>
-        {loading ? 'Buscando...' : 'Iniciar búsqueda'}
-      </button>
+        <button onClick={handleGptRequest} disabled={loading}>
+          {loading ? 'Buscando...' : 'Iniciar búsqueda'}
+        </button>
       {gptResponse && (
         <div className="gpt-response">
           <p>{gptResponse}</p>

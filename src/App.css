@@ -7,6 +7,8 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  position: relative; /* Ensure position relative for absolute positioning of circles */
+  z-index: -2;
 }
 
 .container {
@@ -19,11 +21,14 @@ body {
 }
 
 .header {
+  display: flex;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.logo {
+.logo-icon img {
   width: 50px;
+  height: auto;
 }
 
 .content {
@@ -43,13 +48,20 @@ body {
   margin-bottom: 20px;
 }
 
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .shield-icon {
   margin-bottom: 10px;
 }
 
 .shield-icon img {
-  width: 100px; /* Ajusta el tamaño según sea necesario */
-  height: auto; /* Mantén la proporción de la imagen */
+  width: 100px; /* Adjust size as needed */
+  height: auto; /* Maintain image aspect ratio */
 }
 
 .review-button {
@@ -59,7 +71,7 @@ body {
   height: 50px;
   border: 2px solid #fff;
   border-radius: 10px;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -71,4 +83,57 @@ body {
 .review-button:hover {
   background-color: #fff;
   color: #000;
+}
+
+.info-box {
+  border: 1px solid #979797;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.info-box p {
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+.circle {
+  position: absolute;
+  top: 10%; /* Position the circle vertically */
+  left: 100%; /* Position the circle horizontally */
+  transform: translate(-50%, -50%); /* Center the circle */
+  width: 200px;
+  height: 200px;
+  background-color: none; /* Color of the circle */
+  border-radius: 50%; /* Makes the element a circle */
+  box-shadow: 0 0 0 10px rgba(40, 40, 40, 0.5); /* Color the border radius */
+  z-index: -1;
+}
+
+.circle2 {
+  position: absolute;
+  top: 75%; /* Position the circle vertically */
+  left: -10%; /* Position the circle horizontally */
+  transform: translate(-50%, -50%); /* Center the circle */
+  width: 250px;
+  height: 250px;
+  background-color: none; /* Color of the circle */
+  border-radius: 50%; /* Makes the element a circle */
+  box-shadow: 0 0 0 10px rgba(40, 40, 40, 0.5); /* Color the border radius */
+  z-index: -1;
+}
+
+
+.circle3 {
+  position: absolute;
+  top: 65%; /* Position the circle vertically */
+  left: 85%; /* Position the circle horizontally */
+  transform: translate(-50%, -50%); /* Center the circle */
+  width: 130px;
+  height: 130px;
+  background-color: none; /* Color of the circle */
+  border-radius: 50%; /* Makes the element a circle */
+  border-color: 5px solid #fff;
+  box-shadow: 0 0 0 10px rgba(40, 40, 40, 0.5); /* Color the border radius */
+  z-index: -1;
 }
