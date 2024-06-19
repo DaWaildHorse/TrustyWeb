@@ -94,7 +94,7 @@ const App: React.FC = () => {
               <div className='circle'></div>
               <div className='circle2'></div>
               <div className='circle3'></div>
-              <h1>TrustyWeb</h1>
+              <h1 className="no-margin-top">TrustyWeb</h1>
             </div>
             <div className="card">
               <div className="shield">
