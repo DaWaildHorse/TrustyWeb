@@ -1,27 +1,69 @@
 import React, { useState } from 'react';
 import protegerIcon from './assets/proteger.png';
 import './ReviewTextView.css'; // Asegúrate de agregar este archivo CSS
+import axios from 'axios';
 
 interface ReviewTextViewProps {
   navigateToHome: () => void;
+  initialText?: string; // Propiedad opcional para recibir el texto inicial
 }
 
-const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome }) => {
+const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome, initialText = '' }) => {
   const [icon] = useState(protegerIcon);
+  const [textBoxContent, setTextBoxContent] = useState(initialText);
+  const [gptResponse, setGptResponse] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextBoxContent(e.target.value);
+  };
+
+  const handleGptRequest = async () => {
+    if (textBoxContent.trim()) {
+      setLoading(true);
+      try {
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+          model: "gpt-4",
+          messages: [{ role: "user", content: textBoxContent }]
+        }, {
+          headers: {
+            'Authorization': 'Bearer sk-proj-ROLYIWfz7E3uWYf84jT3T3BlbkFJ0LXbVDxN6zVYazVDy2Jx'
+          }
+        });
+
+        const botMessage = response.data.choices[0].message.content;
+        setGptResponse(botMessage);
+      } catch (error) {
+        console.error('Error fetching GPT response:', error);
+        setGptResponse('Error fetching response. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="review-container">
       <div className="header">
-        <h1>LOGO</h1>
+        <h3>Copia tu texto debajo, nosotros consultaremos otras fuentes.</h3>
       </div>
-      <div className="text-box">
-        <p> {/*Cambiar posteriormente los valores para que cambie por el texto que se haya seleccionado*/}
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc purus tellus, egestas quis dolor sit amet, volutpat finibus dolor. Suspendisse laoreet suscipit felis at luctus. Maecenas ac velit vitae urna sagittis varius. Pellentesque in nunc ac ipsum condimentum semper a et est. Mauris tempus rhoncus leo, euismod varius lacus eleifend vitae.
-        </p>
-      </div>
+      <textarea
+        className="text-box"
+        value={textBoxContent}
+        onChange={handleTextChange}
+        rows={5} // Reducido de 10 a 5
+      />
+      <button onClick={handleGptRequest} disabled={loading}>
+        {loading ? 'Buscando...' : 'Iniciar búsqueda'}
+      </button>
+      {gptResponse && (
+        <div className="gpt-response">
+          <p>{gptResponse}</p>
+        </div>
+      )}
       <div className="verification-info">
         <div className="shield-icon">
-        <img src={icon} alt="Icon" />
+          <img src={icon} alt="Icon" />
         </div>
         <div className="info">
           <h2>Texto Verificado</h2>

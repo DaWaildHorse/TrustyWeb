@@ -36,12 +36,12 @@ const App: React.FC = () => {
                   <img src={icon} alt="Icon" />
                 </div>
                 <h2>Fuente Confiable</h2>
+                <p>Autor</p>
+                <p>Fecha de publicación</p>
+                <p>Fuentes</p>
               </div>
               <button className="review-button" onClick={() => setCurrentView('review')}>
                 Revisa el texto
-              </button>
-              <button className="chat-button" onClick={() => setCurrentView('chat')}>
-                Chat with AI
               </button>
             </div>
           </>
