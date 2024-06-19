@@ -98,17 +98,17 @@ const App: React.FC = () => {
                 <div className="shield-icon">
                   <img src={icon} alt="Icon" />
                 </div>
-                <h2>Source {isSourceViable === null ? 'Unknown' : isSourceViable ? 'Trustworthy' : 'Not Trustworthy'}</h2>
+                <h2>Fuente {isSourceViable === null ? 'Desconocido' : isSourceViable ? 'Confiable' : 'no válida'}</h2>
                 <div className="info-box">
-                  <p>Author: {author}</p>
-                  <p>Sources: {sources}</p>
+                  <p>Autor: {author}</p>
+                  <p>Fuente: {sources}</p>
                 </div>
               </div>
               <button className="review-button" onClick={() => setCurrentView('review')}>
-                Review the text
+                Revisar el texto
               </button>
               <button className="review-button" onClick={() => setCurrentView('chat')}>
-                Consult a summary
+                Consultar un resumen
               </button>
             </div>
           </>
