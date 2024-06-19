@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import protegerIcon from './assets/proteger.png';
 import './ReviewTextView.css'; // Asegúrate de agregar este archivo CSS
 
 interface ReviewTextViewProps {
@@ -6,6 +7,8 @@ interface ReviewTextViewProps {
 }
 
 const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome }) => {
+  const [icon] = useState(protegerIcon);
+
   return (
     <div className="review-container">
       <div className="header">
@@ -18,6 +21,7 @@ const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome }) => {
       </div>
       <div className="verification-info">
         <div className="shield-icon">
+        <img src={icon} alt="Icon" />
         </div>
         <div className="info">
           <h2>Texto Verificado</h2>
