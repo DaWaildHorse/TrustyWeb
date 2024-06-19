@@ -12,16 +12,16 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState('home');
   const [isSourceViable, setIsSourceViable] = useState<boolean | null>(null);
 
-  const trustedUrls = [
-    'https://mexico.as.com/actualidad/tormenta-tropical-alberto-en-vivo-hoy-trayectoria-estados-afectados-en-mexico-ultimas-noticias-n/',
-    'https://www.elfinanciero.com.mx/cdmx/2024/06/18/cortes-de-agua-en-cdmx-y-edomex-del-19-al-20-de-junio-por-fuga-en-el-sistema-cutzamala/',
-    // Agrega más URLs confiables aquí
+  const trustedUrlPrefixes = [
+    'https://www.elfinanciero.com.mx',
+    'https://mexico.as.com',
+    // Agrega más prefijos de URLs confiables aquí
   ];
 
-  const untrustedUrls = [
+  const untrustedUrlPrefixes = [
     'https://example.com/untrusted1',
     'https://example.com/untrusted2',
-    // Agrega más URLs no confiables aquí
+    // Agrega más prefijos de URLs no confiables aquí
   ];
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const App: React.FC = () => {
       chrome.tabs.query(queryOptions, (tabs) => {
         const [activeTab] = tabs;
         if (activeTab.url) {
-          verifySource(activeTab.url); // Realizar la verificación de la fuente
+          verifySource(activeTab.url); // Realizar la verificación de la fuente usando la URL completa
         } else {
           setIsSourceViable(false); // Si no se detecta la URL, se marca como no confiable
           setIcon(cancelarIcon); // Cambia la imagen del escudo a cancelar.png
@@ -42,10 +42,10 @@ const App: React.FC = () => {
   }, []);
 
   const verifySource = (url: string) => {
-    if (trustedUrls.includes(url)) {
+    if (trustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(true);
       setIcon(protegerIcon); // Cambia la imagen del escudo a proteger.png
-    } else if (untrustedUrls.includes(url)) {
+    } else if (untrustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(false);
       setIcon(cancelarIcon); // Cambia la imagen del escudo a cancelar.png
     } else {
