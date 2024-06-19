@@ -75,9 +75,9 @@ const App: React.FC = () => {
     } else {
       setIsSourceViable(null);
       setIcon(cancelarIcon);
-      setAuthor('');
-      setSources('');
-      setDate('');
+      setAuthor('Autor no encontrado');
+      setSources('Fuentes no encontradas');
+      setDate(' Fecha de publicacion no encontrada');
     }
   };
 
@@ -101,7 +101,7 @@ const App: React.FC = () => {
                 <div className="shield-icon">
                   <img src={icon} alt="Icon" />
                 </div>
-                <h2>Fuente {isSourceViable === null ? 'Desconocida' : isSourceViable ? 'Verificada' : 'No Verificada'}</h2>
+                <h2>Fuente {isSourceViable === null ? 'Desconocida' : isSourceViable ? 'Verificada' : 'Fuente No Verificada'}</h2>
                 <div className="info-box">
                   <p>Autor: {author}</p>
                   <p>Fuente: {sources}</p>
