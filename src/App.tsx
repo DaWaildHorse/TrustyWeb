@@ -1,58 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import protegerIcon from './assets/proteger.png';
-import cancelarIcon from './assets/cancelar.png'; // Import cancelar.png
+import cancelarIcon from './assets/cancelar.png';
 import './App.css';
 import LogoIcon from './assets/Logo fondo.png';
 import ReviewTextView from './ReviewTextView';
-import Chat from './Chat.tsx'; // Assuming Chat.tsx is the correct path
+import Chat from './Chat.tsx';
+
 
 const App: React.FC = () => {
-  const [icon, setIcon] = useState(protegerIcon); // Estado para la imagen del escudo
+  const [icon, setIcon] = useState(protegerIcon);
   const [logoIcon] = useState(LogoIcon);
   const [currentView, setCurrentView] = useState('home');
   const [isSourceViable, setIsSourceViable] = useState<boolean | null>(null);
   const [author, setAuthor] = useState<string>('');
+  const [date , setDate] = useState<string>('');
   const [sources, setSources] = useState<string>('');
+  const [currentUrl, setCurrentUrl] = useState<string>('');
 
   const trustedUrlPrefixes = [
     'https://www.elfinanciero.com.mx',
     'https://mexico.as.com',
     'https://scielo.org',
     'https://cnnespanol.cnn.com/',
-    // Add more trusted URL prefixes here
   ] as const;
 
-  const urlMetadata: { [key in typeof trustedUrlPrefixes[number]]: { author: string; sources: string; } } = {
+  const urlMetadata: { [key in typeof trustedUrlPrefixes[number]]: { author: string; sources: string; date : string } } = {
     'https://www.elfinanciero.com.mx': {
       author: 'Grupo Multimedia Lauman',
-      sources: 'El Financiero'
+      sources: 'El Financiero',
+      date : "18 / 06 / 2024"
     },
     'https://mexico.as.com': {
       author: 'AS México Staff',
-      sources: 'AS México'
+      sources: 'AS México',
+      date : "05 / 03 / 2023"
     },
     'https://scielo.org': {
       author: 'SciELO',
-      sources: 'Scientific Electronic Library Online'
+      sources: 'Scientific Electronic Library Online',
+      date : "30 / 05 / 2024"
     },
     'https://cnnespanol.cnn.com/': {
-      author: 'Cable News Network. ',
-      sources: 'CNN en Español'
+      author: 'Cable News Network',
+      sources: 'CNN en Español',
+      date : "16 / 12 / 2023"
     }
   };
 
   useEffect(() => {
-    // Check if the chrome.tabs API is available
     if (chrome.tabs && chrome.tabs.query) {
-      // Fetch the current active tab's URL
       const queryOptions = { active: true, lastFocusedWindow: true };
       chrome.tabs.query(queryOptions, (tabs) => {
         const [activeTab] = tabs;
         if (activeTab.url) {
-          verifySource(activeTab.url); // Verify the source using the full URL
+          setCurrentUrl(activeTab.url); // Set the current URL
+          verifySource(activeTab.url);
         } else {
-          setIsSourceViable(false); // If no URL is detected, mark as untrustworthy
-          setIcon(cancelarIcon); // Change the shield icon to cancel.png
+          setIsSourceViable(false);
+          setIcon(cancelarIcon);
         }
       });
     }
@@ -66,16 +71,13 @@ const App: React.FC = () => {
       const metadata = urlMetadata[trustedPrefix];
       setAuthor(metadata.author);
       setSources(metadata.sources);
-    } else if (trustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
-      setIsSourceViable(false);
-      setIcon(cancelarIcon);
-      setAuthor('');
-      setSources('');
+      setDate(metadata.date);
     } else {
       setIsSourceViable(null);
       setIcon(cancelarIcon);
       setAuthor('');
       setSources('');
+      setDate('');
     }
   };
 
@@ -85,6 +87,7 @@ const App: React.FC = () => {
         return (
           <>
             <div className='header'>
+              
               <div className="logo-icon">
                 <img src={logoIcon} alt="Logo icon" />
               </div>
@@ -98,10 +101,11 @@ const App: React.FC = () => {
                 <div className="shield-icon">
                   <img src={icon} alt="Icon" />
                 </div>
-                <h2>Fuente {isSourceViable === null ? 'Desconocido' : isSourceViable ? 'Confiable' : 'no válida'}</h2>
+                <h2>Fuente {isSourceViable === null ? 'Desconocida' : isSourceViable ? 'Verificada' : 'No Verificada'}</h2>
                 <div className="info-box">
                   <p>Autor: {author}</p>
                   <p>Fuente: {sources}</p>
+                  <p>Fecha : {date}</p>
                 </div>
               </div>
               <button className="review-button" onClick={() => setCurrentView('review')}>
@@ -111,12 +115,13 @@ const App: React.FC = () => {
                 Consultar un resumen
               </button>
             </div>
+
           </>
         );
       case 'review':
         return <ReviewTextView navigateToHome={() => setCurrentView('home')} />;
       case 'chat':
-        return <Chat currentUrl={currentView} />;
+        return <Chat currentUrl={currentUrl} />;
       default:
         return <div>View not found</div>;
     }
