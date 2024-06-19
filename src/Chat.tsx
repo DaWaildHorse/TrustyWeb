@@ -17,7 +17,7 @@ const Chat = () => {
                     messages: [{ role: "user", content: userMessage }]
                 }, {
                     headers: {
-                        'Authorization': `Bearer `
+                        'Authorization': 'Bearer '
                     }
                 });
 
