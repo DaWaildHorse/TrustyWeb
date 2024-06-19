@@ -11,13 +11,37 @@ const App: React.FC = () => {
   const [logoIcon] = useState(LogoIcon);
   const [currentView, setCurrentView] = useState('home');
   const [isSourceViable, setIsSourceViable] = useState<boolean | null>(null);
+  const [author, setAuthor] = useState<string>('');
+  const [sources, setSources] = useState<string>('');
 
   const trustedUrlPrefixes = [
     'https://www.elfinanciero.com.mx',
     'https://mexico.as.com',
-    'https://scielo.org'
+    'https://scielo.org',
+    'https://cnnespanol.cnn.com/',
     // Agrega más prefijos de URLs confiables aquí
-  ];
+  ] as const;
+
+  const urlMetadata: { [key in typeof trustedUrlPrefixes[number]]: { author: string; sources: string; } } = {
+    'https://www.elfinanciero.com.mx': {
+      author: 'Grupo Multimedia Lauman',
+      sources: 'El Financiero'
+    },
+    'https://mexico.as.com': {
+      author: 'AS México Staff',
+      sources: 'AS México'
+    },
+    'https://scielo.org': {
+      author: 'SciELO',
+      sources: 'Scientific Electronic Library Online'
+    },
+    'https://cnnespanol.cnn.com/': {
+      author: 'Cable News Network. ',
+      sources: 'CNN en Español'
+    }
+
+    // Agrega más metadata para URLs confiables aquí
+  };
 
   const untrustedUrlPrefixes = [
     'https://example.com/untrusted1',
@@ -45,18 +69,28 @@ const App: React.FC = () => {
   }, []);
 
   const verifySource = (url: string) => {
-    if (trustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
+    const trustedPrefix = trustedUrlPrefixes.find(prefix => url.startsWith(prefix));
+    if (trustedPrefix) {
       setIsSourceViable(true);
       setIcon(protegerIcon);
+      const metadata = urlMetadata[trustedPrefix];
+      setAuthor(metadata.author);
+      setSources(metadata.sources);
     } else if (untrustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(false);
       setIcon(cancelarIcon);
+      setAuthor('');
+      setSources('');
     } else if (trustedTLDs.some(tld => url.includes(tld))) {
       setIsSourceViable(true);
       setIcon(protegerIcon);
+      setAuthor('Desconocido');
+      setSources('Desconocido');
     } else {
       setIsSourceViable(null);
       setIcon(cancelarIcon);
+      setAuthor('');
+      setSources('');
     }
   };
 
@@ -81,9 +115,8 @@ const App: React.FC = () => {
                 </div>
                 <h2>Fuente {isSourceViable === null ? 'Desconocida' : isSourceViable ? 'Confiable' : 'No Confiable'}</h2>
                 <div className="info-box">
-                  <p>Autor: </p> {/*Hacer las modificaciones correspondientes para que se muestren los valores encontrados por chat */}
-                  <p>Fecha de publicación: </p>
-                  <p>Fuentes: </p>
+                  <p>Autor: {author}</p>
+                  <p>Fuentes: {sources}</p>
                 </div>
               </div>
               <button className="review-button" onClick={() => setCurrentView('review')}>
