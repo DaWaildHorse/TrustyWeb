@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import protegerIcon from './assets/proteger.png';
-import cancelarIcon from './assets/cancelar.png'; // Importar la imagen cancelar.png
+import cancelarIcon from './assets/cancelar.png'; // Import cancelar.png
 import './App.css';
 import LogoIcon from './assets/Logo fondo.png';
 import ReviewTextView from './ReviewTextView';
-import Chat from './Chat'; // Assuming Chat.tsx is the correct path
+import Chat from './Chat.tsx'; // Assuming Chat.tsx is the correct path
 
 const App: React.FC = () => {
   const [icon, setIcon] = useState(protegerIcon); // Estado para la imagen del escudo
@@ -19,7 +19,7 @@ const App: React.FC = () => {
     'https://mexico.as.com',
     'https://scielo.org',
     'https://cnnespanol.cnn.com/',
-    // Agrega más prefijos de URLs confiables aquí
+    // Add more trusted URL prefixes here
   ] as const;
 
   const urlMetadata: { [key in typeof trustedUrlPrefixes[number]]: { author: string; sources: string; } } = {
@@ -39,17 +39,7 @@ const App: React.FC = () => {
       author: 'Cable News Network. ',
       sources: 'CNN en Español'
     }
-
-    // Agrega más metadata para URLs confiables aquí
   };
-
-  const untrustedUrlPrefixes = [
-    'https://example.com/untrusted1',
-    'https://example.com/untrusted2',
-    // Agrega más prefijos de URLs no confiables aquí
-  ];
-
-  const trustedTLDs = ['.org', '.edu', '.gob'];
 
   useEffect(() => {
     // Check if the chrome.tabs API is available
@@ -59,10 +49,10 @@ const App: React.FC = () => {
       chrome.tabs.query(queryOptions, (tabs) => {
         const [activeTab] = tabs;
         if (activeTab.url) {
-          verifySource(activeTab.url); // Realizar la verificación de la fuente usando la URL completa
+          verifySource(activeTab.url); // Verify the source using the full URL
         } else {
-          setIsSourceViable(false); // Si no se detecta la URL, se marca como no confiable
-          setIcon(cancelarIcon); // Cambia la imagen del escudo a cancelar.png
+          setIsSourceViable(false); // If no URL is detected, mark as untrustworthy
+          setIcon(cancelarIcon); // Change the shield icon to cancel.png
         }
       });
     }
@@ -76,16 +66,11 @@ const App: React.FC = () => {
       const metadata = urlMetadata[trustedPrefix];
       setAuthor(metadata.author);
       setSources(metadata.sources);
-    } else if (untrustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
+    } else if (trustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(false);
       setIcon(cancelarIcon);
       setAuthor('');
       setSources('');
-    } else if (trustedTLDs.some(tld => url.includes(tld))) {
-      setIsSourceViable(true);
-      setIcon(protegerIcon);
-      setAuthor('Desconocido');
-      setSources('Desconocido');
     } else {
       setIsSourceViable(null);
       setIcon(cancelarIcon);
@@ -101,7 +86,7 @@ const App: React.FC = () => {
           <>
             <div className='header'>
               <div className="logo-icon">
-                <img src={logoIcon} alt="logo-icon" />
+                <img src={logoIcon} alt="Logo icon" />
               </div>
               <div className='circle'></div>
               <div className='circle2'></div>
@@ -113,14 +98,17 @@ const App: React.FC = () => {
                 <div className="shield-icon">
                   <img src={icon} alt="Icon" />
                 </div>
-                <h2>Fuente {isSourceViable === null ? 'Desconocida' : isSourceViable ? 'Confiable' : 'No Confiable'}</h2>
+                <h2>Source {isSourceViable === null ? 'Unknown' : isSourceViable ? 'Trustworthy' : 'Not Trustworthy'}</h2>
                 <div className="info-box">
-                  <p>Autor: {author}</p>
-                  <p>Fuentes: {sources}</p>
+                  <p>Author: {author}</p>
+                  <p>Sources: {sources}</p>
                 </div>
               </div>
               <button className="review-button" onClick={() => setCurrentView('review')}>
-                Revisa el texto
+                Review the text
+              </button>
+              <button className="review-button" onClick={() => setCurrentView('chat')}>
+                Consult a summary
               </button>
             </div>
           </>
@@ -128,7 +116,7 @@ const App: React.FC = () => {
       case 'review':
         return <ReviewTextView navigateToHome={() => setCurrentView('home')} />;
       case 'chat':
-        return <Chat />;
+        return <Chat currentUrl={currentView} />;
       default:
         return <div>View not found</div>;
     }

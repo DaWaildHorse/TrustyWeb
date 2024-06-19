@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import protegerIcon from './assets/proteger.png';
 import './ReviewTextView.css'; 
 import axios from 'axios';
 
@@ -9,7 +8,7 @@ interface ReviewTextViewProps {
 }
 
 const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome, initialText = '' }) => {
-  const [icon] = useState(protegerIcon);
+
   const [textBoxContent, setTextBoxContent] = useState(initialText);
   const [gptResponse, setGptResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -61,18 +60,7 @@ const ReviewTextView: React.FC<ReviewTextViewProps> = ({ navigateToHome, initial
           <p>{gptResponse}</p>
         </div>
       )}
-      <div className="verification-info">
-        <div className="shield-icon">
-          <img src={icon} alt="Icon" />
-        </div>
-        <div className="info">
-          <h2>Texto Verificado</h2>
-          <p><strong>15</strong> Fuentes</p>
-          <p><strong>80%</strong> Coincidencia</p>
-          <p><strong>15%</strong> Sin información</p>
-        </div>
-      </div>
-      <p>Visita los recursos similares</p>
+      <p> Estas fuentes confirman tu texto... </p>
       <div className="resources">
         <button onClick={() => window.open('https://wikipedia.org', '_blank')}>Wikipedia</button>
         <button onClick={() => window.open('https://scholar.google.com', '_blank')}>Google académico</button>
