@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios for API requests
+//import axios from 'axios'; // Import axios for API requests
 import protegerIcon from './assets/proteger.png';
 import './App.css';
 import ReviewTextView from './ReviewTextView';
