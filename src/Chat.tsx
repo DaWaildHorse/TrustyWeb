@@ -17,7 +17,7 @@ const Chat = () => {
                     messages: [{ role: "user", content: userMessage }]
                 }, {
                     headers: {
-                        'Authorization': `Bearer sk-proj-OaKNOwT7pMBmb0WeqHcyT3BlbkFJmLIK0mHzPXZqvM1cy3fm`
+                        'Authorization': `Bearer `
                     }
                 });
 
