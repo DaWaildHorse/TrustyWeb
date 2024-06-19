@@ -15,6 +15,7 @@ const App: React.FC = () => {
   const trustedUrlPrefixes = [
     'https://www.elfinanciero.com.mx',
     'https://mexico.as.com',
+    'https://scielo.org'
     // Agrega más prefijos de URLs confiables aquí
   ];
 
@@ -23,6 +24,8 @@ const App: React.FC = () => {
     'https://example.com/untrusted2',
     // Agrega más prefijos de URLs no confiables aquí
   ];
+
+  const trustedTLDs = ['.org', '.edu', '.gob'];
 
   useEffect(() => {
     // Check if the chrome.tabs API is available
@@ -44,13 +47,16 @@ const App: React.FC = () => {
   const verifySource = (url: string) => {
     if (trustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(true);
-      setIcon(protegerIcon); // Cambia la imagen del escudo a proteger.png
+      setIcon(protegerIcon);
     } else if (untrustedUrlPrefixes.some(prefix => url.startsWith(prefix))) {
       setIsSourceViable(false);
-      setIcon(cancelarIcon); // Cambia la imagen del escudo a cancelar.png
+      setIcon(cancelarIcon);
+    } else if (trustedTLDs.some(tld => url.includes(tld))) {
+      setIsSourceViable(true);
+      setIcon(protegerIcon);
     } else {
-      setIsSourceViable(null); // URL desconocida o no categorizada
-      setIcon(cancelarIcon); // Cambia la imagen del escudo a cancelar.png por defecto para URLs desconocidas
+      setIsSourceViable(null);
+      setIcon(cancelarIcon);
     }
   };
 
