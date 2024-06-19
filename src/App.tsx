@@ -3,6 +3,8 @@ import protegerIcon from './assets/proteger.png';
 import './App.css';
 import ReviewTextView from './ReviewTextView';
 
+//Hola
+
 const App: React.FC = () => {
   const [icon] = useState(protegerIcon);
   const [currentView, setCurrentView] = useState('home');
