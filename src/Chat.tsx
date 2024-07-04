@@ -20,7 +20,7 @@ const Chat: React.FC<ChatProps> = ({ navigateToHome, currentUrl }) => {
                 messages: [{ role: "user", content: message }]
             }, {
                 headers: {
-                    'Authorization': `Bearer sk-proj-nqNovFXLqIq0xnFYdbOgT3BlbkFJMywqMKoTIanRSC5CGp5C`
+                    'Authorization': `Bearer *OPENAI API KEY*`
                 }
             });
             const botMessage = response.data.choices[0].message.content;
